@@ -1,0 +1,16 @@
+Pointers
+1.The actual value of a pointer type is an address of
+memory
+2.The two most important operators used with the pointer
+type are:
+3. & the address operator
+4. * the dereferencing (or indirection) operator
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+int p;
+int *list1,**list2;
+p=10;
+list1=&p;
+list2=&list1;
+printf("%d,%d,%d",a,*list1,**list2);

@@ -1,0 +1,44 @@
+#include<stdio.h>
+#define Q_size 5
+int ch,item,r,f,q[q_size];
+
+
+void insert rear()
+{
+int item,r=-1;
+if(r==q_size)
+{
+printf("q is overflow");
+return;
+}
+printf("enter the item:\n");
+scanf("%d",&item);
+q[++r]=item;
+}
+
+
+void delete front()
+{
+f=0;
+if(f>r)
+{
+printf("Q is Empty");
+return;
+}
+printf("Element Deleted is = %d\n",q[f++]);
+}
+
+
+void display()
+{
+int i;
+if(f>r)
+{
+printf("Q is Empty");
+return;
+}
+printf("content in the queues are :\n");
+for(i=f;i<=r;i++)
+printf("%d\n",q[i]);
+}
+

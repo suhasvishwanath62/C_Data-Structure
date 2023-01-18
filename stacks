@@ -1,0 +1,139 @@
+Infix --> Postfix:
+
+Algorithm:
+------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Infix to Postfix Conversion
+(Intuitive Algorithm)
+(1) Fully parenthesize expression
+a / b - c + d * e - a * c -->
+((((a / b) - c) + (d * e)) - a * c))
+(2) All operators replace their corresponding right 
+parentheses.
+((((a / b) - c) + (d * e)) - a * c))
+(3) Delete all parentheses.
+ab/c-de*+ac*-
+two passes
+------------------------------------------------------------------------------------------------------------------------------------------------------------------
+#define MAX_STACK_SIZE 100 /* maximum stack size */
+#define MAX_EXPR_SIZE 100 /* max size of expression */
+typedef enum{1paran, rparen, plus, minus, times, divide, 
+mod, eos, operand} precedence;
+int stack[MAX_STACK_SIZE]; /* global stack */
+char expr[MAX_EXPR_SIZE]; /* input string */
+int eval(void)
+{
+/* evaluate a postfix expression, expr, maintained as a 
+global variable, ‘\0’ is the the end of the expression.
+The stack and top of the stack are global variables.
+get_token is used to return the token type and 
+the character symbol. Operands are assumed to be single
+character digits */
+precedence token;
+char symbol;
+int op1, op2;
+int n = 0; /* counter for the expression string */
+int top = -1;
+token = get_token(&symbol, &n);
+while (token != eos) {
+if (token == operand)
+add(&top, symbol-’0’); /* stack insert */
+else {
+/* remove two operands, perform operation, and 
+return result to the stack */
+op2 = delete(&top); /* stack delete */
+op1 = delete(&top);
+switch(token) {
+case plus: add(&top, op1+op2); break;
+case minus: add(&top, op1-op2); break; 
+case times: add(&top, op1*op2); break; 
+case divide: add(&top, op1/op2); break; 
+case mod: add(&top, op1%op2);
+}
+}
+token = get_token (&symbol, &n);
+}
+return delete(&top); /* return result */
+}
+precedence get_token(char *symbol, int *n)
+{
+/* get the next token, symbol is the character
+representation, which is returned, the token is 
+represented by its enumerated value, which
+is returned in the function name */
+*symbol =expr[(*n)++];
+switch (*symbol) {
+case ‘(‘ : return lparen;
+case ’)’ : return rparen;
+case ‘+’: return plus;
+case ‘-’ : return minus;
+case ‘/’ : return divide;
+case ‘*’ : return times;
+case ‘%’ : return mod;
+case ‘\0‘ : return eos;
+default : return operand; 
+/* no error checking, default is operand */
+}
+}
+----------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+void postfix(void)
+{
+/* output the postfix of the expression. The expression
+string, the stack, and top are global */
+char symbol;
+precedence token;
+int n = 0;
+int top = 0; /* place eos on stack */
+stack[0] = eos;
+for (token = get _token(&symbol, &n); token != eos;
+token = get_token(&symbol, &n)) {
+if (token == operand)
+printf (“%c”, symbol);
+else if (token == rparen ){
+/*unstack tokens until left parenthesis */
+while (stack[top] != lparen)
+print_token(delete(&top));
+delete(&top); /*discard the left parenthesis */
+}
+else{
+/* remove and print symbols whose isp is greater
+than or equal to the current token’s icp */
+while(isp[stack[top]] >= icp[token] )
+print_token(delete(&top));
+add(&top, token);
+}
+}
+while ((token = delete(&top)) != eos)
+print_token(token);
+print(“\n”);
+}
+----------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+#define MEMORY_SIZE 100 /* size of memory */
+#define MAX_STACK_SIZE 100 
+/* max number of stacks plus 1 */
+/* global memory declaration */
+element memory[MEMORY_SIZE];
+int top[MAX_STACKS];
+int boundary[MAX_STACKS];
+int n; /* number of stacks entered by the user */
+top[0] = boundary[0] = -1;
+for (i = 1; i < n; i++)
+top[i] =boundary[i] =(MEMORY_SIZE/n)*i;
+boundary[n] = MEMORY_SIZE-1;
+
+void add(int i, element item)
+{
+/* add an item to the ith stack */
+if (top[i] == boundary [i+1])
+stack_full(i); 
+memory[++top[i]] = item;
+}
+
+element delete(int i)
+{
+/* remove top element from the ith stack */
+if (top[i] == boundary[i])
+return stack_empty(i);
+return memory[top[i]--];
+} 

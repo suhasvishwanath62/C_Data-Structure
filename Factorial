@@ -1,0 +1,18 @@
+#include<stdio.h>
+#include<lib.h>
+int main()
+{
+int fact(int n)
+{
+if(n==0)
+return 1;
+else
+return (n*(n-1)fact);
+}
+main()
+{
+int n;
+printf("enter a number\n");
+scanf("%d",&n);
+printf("Factorial = %d",fact(n));
+}

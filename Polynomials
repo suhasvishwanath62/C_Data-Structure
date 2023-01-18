@@ -1,0 +1,100 @@
+Polynomial Addition:
+---------------------------------------------------------------------------------------------------
+Data structure 1: Polynomials A(X)=3X20+2X5+4, B(X)=X4+10X3+3X2+1
+---------------------------------------------------------------------------------------------------
+#define MAX_DEGREE 101
+typedef struct {
+int degree;
+float coef[MAX_DEGREE];
+} polynomial;
+/* d =a + b, where a, b, and d are polynomials */
+d = Zero( )
+while (! IsZero(a) && ! IsZero(b)) do {
+switch COMPARE (Lead_Exp(a), Lead_Exp(b)) {
+case -1: d =
+Attach(d, Coef (b, Lead_Exp(b)), Lead_Exp(b));
+b = Remove(b, Lead_Exp(b));
+break;
+case 0: sum = Coef (a, Lead_Exp (a)) + Coef ( b, Lead_Exp(b));
+if (sum) {
+Attach (d, sum, Lead_Exp(a));
+a = Remove(a , Lead_Exp(a));
+b = Remove(b , Lead_Exp(b));
+}
+break;
+case 1: d =
+Attach(d, Coef (a, Lead_Exp(a)), Lead_Exp(a));
+a = Remove(a, Lead_Exp(a));
+} 
+}
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Data structure 2: use one global array to store all polynomials
+A(X)=2X1000+1
+B(X)=X4+10X3+3X2+1
+2 1 1 10 3 1
+1000 0 4 3 2 0
+coef
+exp
+starta finisha startb finishb avail
+0 1 2 3 4 5 6 
+specification representation
+poly          <start, finish>
+A             <0,1>
+B             <2,5>
+------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+MAX_TERMS 100 /* size of terms array */
+typedef struct {
+float coef;
+int expon;
+} polynomial;
+polynomial terms[MAX_TERMS];
+int avail = 0;
+/* Add two polynomials: D = A + B */
+void padd (int starta, int finisha, int startb, int finishb,
+int * startd, int *finishd)
+{
+/* add A(x) and B(x) to obtain D(x) */
+float coefficient;
+*startd = avail;
+while (starta <= finisha && startb <= finishb)
+switch (COMPARE(terms[starta].expon,
+terms[startb].expon)) {
+case -1: /* a expon < b expon */
+attach(terms[startb].coef, terms[startb].expon);
+startb++
+break;
+case 0: /* equal exponents */
+coefficient = terms[starta].coef +
+terms[startb].coef;
+if (coefficient)
+attach (coefficient, terms[starta].expon);
+starta++;
+startb++;
+break;
+case 1: /* a expon > b expon */
+attach(terms[starta].coef, terms[starta].expon);
+starta++;
+}
+/* add in remaining terms of A(x) */
+for( ; starta <= finisha; starta++)
+attach(terms[starta].coef, terms[starta].expon);
+/* add in remaining terms of B(x) */
+for( ; startb <= finishb; startb++)
+attach(terms[startb].coef, terms[startb].expon);
+*finishd =avail -1;
+}
+void attach(float coefficient, int exponent)
+{ 
+/* add a new term to the polynomial */
+if (avail >= MAX_TERMS) {
+fprintf(stderr, “Too many terms in the polynomial\n”);
+exit(1);
+}
+terms[avail].coef = coefficient;
+terms[avail++].expon = exponent;
+}
+
+
+

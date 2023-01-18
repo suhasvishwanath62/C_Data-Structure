@@ -1,0 +1,52 @@
+struct {
+char name[10];
+int age;
+float salary;
+} person;
+strcpy(person.name, “james”);
+person.age=10;
+person.salary=35000;
+
+Typedef:
+typedef struct human_being {
+char name[10];
+int age;
+float salary;
+};
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------
+typedef struct {
+char name[10];
+int age;
+float salary
+} human_being;
+human_being person1, person2;
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Self-Referential Structures:
+
+**One or more of its components is a pointer to itself**
+
+typedef struct list {
+char data;
+list *link;
+}
+
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+UNIONS:
+
+typedef struct sex_type {
+enum tag_field {female, male} sex;
+union {
+int children;
+int beard;
+} u;
+};
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------
+typedef struct human_being {
+char name[10];
+int age;
+float salary;
+date dob;
+sex_type sex_info;
+}
